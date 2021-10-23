@@ -1,22 +1,23 @@
 from flask import Flask
 from pymongo import MongoClient
 import pymongo
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 app = Flask(__name__)
 
 app.config.from_object("config")
+client = MongoClient(os.getenv('CONNECTION_STRING'))
+db = client['brave_together']
 
-
-@app.route('/')
-def index():
-
-    CONNECTION_STRING = "mongodb+srv://admin:9WxI96T8baPlnBRW@cluster0.0qv9t.mongodb.net/brave_together?retryWrites=true&w=majority"
-    client = MongoClient(CONNECTION_STRING)
-    db = client['brave_together']
+@app.route('/insert_one')
+def insertItem():
     collection_name = db["story_tamplate"]
     item = {
     "storyUpload":{
         "mainHeader":{
-            "content":"welcome",
+            "content":"welcome!!",
             "color":"white",
             "fontSize":"14vh"
         }
@@ -44,7 +45,8 @@ def index():
                     "1",
                     "2",
                     "3",
-                    "4"
+                    "4",
+                    "5"
                 ]
             }
 
@@ -54,7 +56,12 @@ def index():
 
     }
 }
-    insert = collection_name.insert_one(item)
+    succ = collection_name.insert_one(item)
+    return 'success'
+
+@app.route('/')
+def index():
+
     return 'Hello Story'
 
 
