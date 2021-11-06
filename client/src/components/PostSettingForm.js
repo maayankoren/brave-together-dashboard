@@ -1,6 +1,7 @@
 import '../App.css';
 import React, { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+
 import PostInputType from './PostInputType';
 
 function PostSettingForm() {
@@ -10,17 +11,20 @@ function PostSettingForm() {
     const [showOptions, setShowOptions] = useState(false)
 
     const submitHandler = async (e) => {
-        // e.preventDefault();
+        console.log(inputTypes);
+        e.preventDefault();
+    }
+    const deleteInputType = (index) => {
+        if (window.confirm('האם אתה בטוח שאתה רוצה למחוק את סוג הקלט?')) {
+            console.log('sds',index)
+            setInputTypes( inputTypes.filter((item,i) => i !== index));
+          }
     }
 
-    // const changeHandler = name => event => {
-    //     setValues({ ...values, [name]: event.target.value })
-    // }
-
     const addInputType = name => {
-        if (name == 'input') {
-            setInputTypes([...inputTypes, { label: '', tag: name, type: 'text' }]);
-        } else if (name == 'textarea') {
+        if (name === 'input') {
+            setInputTypes([...inputTypes, { label: '', tag: name, length: '' }]);
+        } else if (name === 'textarea') {
             setInputTypes([...inputTypes, { label: '', tag: name, rows: '', cols: '50' }]);
         } else {
             setInputTypes([...inputTypes, { label: '', tag: name, options: [] }]);
@@ -45,14 +49,12 @@ function PostSettingForm() {
                     <li className="input-option" onClick={() => addInputType('select')}>בחירה מתוך אפשרויות</li>
                 </ul> : <></>}
 
-                {inputTypes.map((inputType, index) => <PostInputType inputTypes={inputTypes} setInputTypes={setInputTypes} key={index} />)}
+                {inputTypes.map((inputType, index) => <PostInputType inputTypes={inputTypes} setInputTypes={setInputTypes} index={index} deleteInputType={deleteInputType} key={index} />)}
 
                 {inputTypes.length ? <input type="submit" value="שמור"></input> : <></>}
 
             </form>
-
         </div>
-
     );
 }
 
