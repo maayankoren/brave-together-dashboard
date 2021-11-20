@@ -95,16 +95,55 @@ def insertItem():
     print(succ)
     return {"success":True}
 
+
+@app.route('/api/create_collection',methods=['POST'])
+def createCollection():
+    # collection_name = db["collection"]
+    # item = request.get_json()
+
+
+
     
 @app.route('/api/story_body',methods=['POST'])
 def insertStory():
     collection_name = db["story_body"]
     item = request.get_json()
     print("storyBody",item)
+    item["id"] = collection_name.find({}).count()+1
+    item["qoute"] = []
+    item["author"] = "Maayan"
+    item["story_img"] = "src/to/img"
+
+
     collection_name.insert_one(item)
     ##call mizad hagvora api
+
+
+    # {
+    #      "title" : "story_title1",
+    #      "description" : "short_description",
+    #      "text" : "text_description",
+    #      "date" : "2021-12-31",
+    #      "tags":["tag_1","tag_2","tag_3"], 
+    #      "country": "country"
+         
+    #  }
+
     # print(collection_name.insert_one(item))
     return {"success":True}
+
+@app.route('/api/story_quote',methods=['POST'])
+def insertQuote():
+    collection_name = db["story_body"]
+    item = request.get_json()
+    print(item)
+    res = collection_name.update_one({"id":item["id"]},{'$push':{"qoute":{"text":item["qoute"],"share":0}}})
+    print(res)
+    return {"success":True}
+    
+
+
+
 
 @app.route('/api/story_body',methods=['GET'])
 def getStory():
