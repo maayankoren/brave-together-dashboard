@@ -48,7 +48,7 @@ def insertItem():
     item = request.get_json() 
     print("storyUpload",item)
     # if(storyUpload.form)
-    # item = {
+# item = {
 #     "storyUpload":{
 #         "mainHeader":{
 #             "content":"welcome!!",
@@ -97,24 +97,36 @@ def insertItem():
 
     
 @app.route('/api/story_body',methods=['POST'])
-def insertItem():
+def insertStory():
     collection_name = db["story_body"]
     item = request.get_json()
     print("storyBody",item)
-
-    # item={
-    #     "storyBody":{
-    #     "title" : "story_title",
-    #     "description" : "short_description",
-    #     "text" : "text_description",
-    #     "date" : "2021-12-31",
-    #     "tags":["tag_1","tag_2","tag_3"], 
-    #     "country": "country"
-    #     }
-    # }
     collection_name.insert_one(item)
-    print(collection_name.insert_one(item))
+    ##call mizad hagvora api
+    # print(collection_name.insert_one(item))
     return {"success":True}
+
+@app.route('/api/story_body',methods=['GET'])
+def getStory():
+    output = []
+    collection_name = db["story_body"]
+    # print("storyBody",item)
+    storyArr = collection_name.find({})
+    ##call mizad hagvora api
+    for data in storyArr:
+        data['_id'] = dumps(['_id'])
+        del data['_id']
+
+        print(data)
+        output.insert(1,data)
+
+    # storyArr = loads(dumps(storyArr))
+    # print((dumps(storyArr)))
+    # print(collection_name.insert_one(item))
+    # return jsonify(storyArr)
+    return {"data": output}
+
+
 
 @app.route('/')
 def index():
