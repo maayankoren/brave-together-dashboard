@@ -30,7 +30,7 @@ db = client['brave_together']
 # options: (2) ['דוד', 'אריאל']
 # tag: "select"
 # [[Prototype]]: Object
-@app.route('/api/story_tamplate',methods=['GET'])
+@app.route('/api/story_template',methods=['GET'])
 def getItem():
     collection_name = db["story_tamplate"]
     item = collection_name.find_one({"is_history":{"$exists":False}})
@@ -42,11 +42,11 @@ def getItem():
 
 
 
-@app.route('/api/story_tamplate',methods=['POST'])
+@app.route('/api/story_template',methods=['POST'])
 def insertItem():
     collection_name = db["story_tamplate"]
-    item = request.get_json() 
-    print("storyUpload",item)
+    # item = request.data.decode('UTF-8')
+    item = json.loads(request.data.decode(encoding='UTF-8'))
     # if(storyUpload.form)
 # item = {
 #     "storyUpload":{
@@ -90,14 +90,17 @@ def insertItem():
 
 #     }
     collection_name.update_many({},{"$set":{"is_history":True}})
+    # item = dumps(item)
+    # print("type",type(item),item)
+
 # } 
     succ = collection_name.insert_one(item)
     print(succ)
     return {"success":True}
 
 
-@app.route('/api/create_collection',methods=['POST'])
-def createCollection():
+# @app.route('/api/create_collection',methods=['POST'])
+# def createCollection():
     # collection_name = db["collection"]
     # item = request.get_json()
 
