@@ -1,4 +1,4 @@
-input[type=text], select {
+input[type=text],input[type=number], select {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -6,6 +6,11 @@ input[type=text], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+input[type=text].selectOption{
+  display: block;
+  width: 50%;
 }
 
 input[type=submit] {
@@ -29,6 +34,9 @@ input[type=submit]:hover {
   padding: 20px;
   border-radius: 5px;
   background-color: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
 }
 
@@ -46,12 +54,15 @@ input[type=submit]:hover {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  position: absolute;
+  top: 70px;
 }
 
 .input-option{
   padding: 10px 25px;
   border-bottom: solid 1px rgb(233, 233, 233);
   cursor: pointer;
+  min-width: 160px;
 }
 
 form {
@@ -59,6 +70,7 @@ form {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: relative;
 }
 
 body{
@@ -72,4 +84,11 @@ body{
   padding: 10px 30px;
   margin: 20px 0;
   border-radius: 5px;
+  /* position: relative; */
+}
+
+.delete-input{
+  position: absolute;
+  left: 12px;
+  cursor: pointer;
 }
