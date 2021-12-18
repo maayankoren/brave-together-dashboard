@@ -109,13 +109,30 @@ def insertItem():
     
 @app.route('/api/story_body',methods=['POST'])
 def insertStory():
+    collection_name = db["story_tamplate"]
+    # story_temp = collection_name.find_one({"is_history":{"$exists":False}})
+    # story_temp = story_temp.form
     collection_name = db["story_body"]
-    item = request.get_json()
+    story_data = json.loads(request.data.decode(encoding='UTF-8'))
+
     print("storyBody",item)
     item["id"] = collection_name.find({}).count()+1
-    item["qoute"] = []
-    item["author"] = "Maayan"
-    item["story_img"] = "src/to/img"
+    # for key, value in story_temp.items():
+    #     item[value] = story_data[value]
+    item["qoute"] = story_data["qoute"]
+    item["author"] = story_data["author"]
+    item["heroName"] = story_data["heroName"]
+    item["story_img"] = story_data["story_img"]
+    item["description"] = story_data["description"]
+    item["title"] = story_data["title"]
+    item["text"] = story_data["text"]
+    item["date"] = story_data["date"]
+    item["country"] = story_data["country"]
+
+    # save to db of mizad hagvora
+
+    # item["author"] = "Maayan"
+    # item["story_img"] = "src/to/img"
 
 
     collection_name.insert_one(item)
@@ -145,13 +162,21 @@ def insertQuote():
     return {"success":True}
     
 
-
-
-
 @app.route('/api/story_body',methods=['GET'])
 def getStory():
     output = []
+    storyId = request.args.get('id')
     collection_name = db["story_body"]
+    if storyId:
+        print('storyId',storyId)
+        item = collection_name.find_one({"id":int(storyId)})
+        item['_id'] = dumps(['_id'])
+        del item['_id']
+        item = loads(dumps(item))
+        print('item',type(item) )
+
+        return {"data": item}
+        
     # print("storyBody",item)
     storyArr = collection_name.find({})
     ##call mizad hagvora api
