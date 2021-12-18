@@ -5,6 +5,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PostInputType from './PostInputType';
 import nextId from "react-id-generator";
 import {saveSettings} from "../api";
+import {fetchStoryTemplate} from "./../apis"
+
 
 function PostSettingForm() {
 
@@ -28,7 +30,7 @@ function PostSettingForm() {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        saveSettings({mainHeader: mainHeader, form: inputTypes});
+        fetchStoryTemplate({mainHeader: mainHeader, form: inputTypes});
     }
     
     const deleteInputType = (index) => {
