@@ -1,16 +1,20 @@
 from flask import Flask, render_template, request, url_for, jsonify
+from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 import pymongo
 import os
 from bson.json_util import dumps
 from bson.json_util import loads
+from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config.from_object("config")
-client = MongoClient(os.getenv('CONNECTION_STRING'))
+client = MongoClient('mongodb+srv://admin:9WxI96T8baPlnBRW@cluster0.0qv9t.mongodb.net/brave_together?retryWrites=true&w=majority')
 db = client['brave_together']
 # story_tamplate
 # {storyTamplate:[{}]}
@@ -46,7 +50,7 @@ def getItem():
 def insertItem():
     collection_name = db["story_tamplate"]
     # item = request.data.decode('UTF-8')
-    item = json.loads(request.data.decode(encoding='UTF-8'))
+    # item = json.loads(request.data.decode(encoding='UTF-8'))
     # if(storyUpload.form)
 # item = {
 #     "storyUpload":{
@@ -94,9 +98,9 @@ def insertItem():
     # print("type",type(item),item)
 
 # } 
-    succ = collection_name.insert_one(item)
-    print(succ)
-    return {"success":True}
+    # succ = collection_name.insert_one(item)
+    # print(succ)
+    # return {"success":True}
 
 
 # @app.route('/api/create_collection',methods=['POST'])
@@ -113,21 +117,21 @@ def insertStory():
     # story_temp = collection_name.find_one({"is_history":{"$exists":False}})
     # story_temp = story_temp.form
     collection_name = db["story_body"]
-    story_data = json.loads(request.data.decode(encoding='UTF-8'))
+    # story_data = json.loads(request.data.decode(encoding='UTF-8'))
 
-    print("storyBody",item)
-    item["id"] = collection_name.find({}).count()+1
-    # for key, value in story_temp.items():
-    #     item[value] = story_data[value]
-    item["qoute"] = story_data["qoute"]
-    item["author"] = story_data["author"]
-    item["heroName"] = story_data["heroName"]
-    item["story_img"] = story_data["story_img"]
-    item["description"] = story_data["description"]
-    item["title"] = story_data["title"]
-    item["text"] = story_data["text"]
-    item["date"] = story_data["date"]
-    item["country"] = story_data["country"]
+    # print("storyBody",item)
+    # item["id"] = collection_name.find({}).count()+1
+    # # for key, value in story_temp.items():
+    # #     item[value] = story_data[value]
+    # item["qoute"] = story_data["qoute"]
+    # item["author"] = story_data["author"]
+    # item["heroName"] = story_data["heroName"]
+    # item["story_img"] = story_data["story_img"]
+    # item["description"] = story_data["description"]
+    # item["title"] = story_data["title"]
+    # item["text"] = story_data["text"]
+    # item["date"] = story_data["date"]
+    # item["country"] = story_data["country"]
 
     # save to db of mizad hagvora
 
@@ -135,7 +139,7 @@ def insertStory():
     # item["story_img"] = "src/to/img"
 
 
-    collection_name.insert_one(item)
+    # collection_name.insert_one(item)
     ##call mizad hagvora api
 
 
@@ -166,16 +170,18 @@ def insertQuote():
 def getStory():
     output = []
     storyId = request.args.get('id')
+    print('storyId', storyId)
     collection_name = db["story_body"]
     if storyId:
-        print('storyId',storyId)
-        item = collection_name.find_one({"id":int(storyId)})
+        print('storyId exsits',storyId)
+        item = collection_name.find_one({"_id" : ObjectId(storyId)})
+        print('story', item)
         item['_id'] = dumps(['_id'])
         del item['_id']
         item = loads(dumps(item))
         print('item',type(item) )
 
-        return {"data": item}
+        return {"story": item}
         
     # print("storyBody",item)
     storyArr = collection_name.find({})
@@ -196,6 +202,7 @@ def getStory():
 
 
 @app.route('/')
+@cross_origin()
 def index():
 
     return 'Hello Story'
