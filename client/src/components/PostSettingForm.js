@@ -16,10 +16,13 @@ function PostSettingForm() {
 
     const addInputType = name => {
         if (name === 'input') {
-            setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, length: '' }]);
+            setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, length: 100 }]);
         } else if (name === 'textarea') {
-            setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, rows: '', cols: '50' }]);
-        } else {
+            setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, rows: 12, cols: "50" }]);
+        } 
+        else if (name === 'checkboxes') {
+            setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, options: [] }]);
+        }else {
             setInputTypes([...inputTypes, {id: nextId(), label: '', tag: name, options: [] }]);
         }
         setShowOptions(!showOptions);
@@ -45,19 +48,17 @@ function PostSettingForm() {
     }
 
     const handleDragEnd = (results) => {
-        console.log(results);
        setInputTypes(reorder(inputTypes, results.source.index, results.destination.index));
     }
 
     return (
         <div className='post-settings'>
             <h2 style={{ textAlign: 'center' }}> הגדרות העלאת פוסט</h2>
-            
             <h4 style={{ textAlign: 'center' }}>  :בחר את שם העמוד שיופיע למשתמש</h4>
-                <input style={{maxWidth: '300px'}} dir="rtl" required autoComplete="off" type="text" id="mainHeader" name="mainHeader" onChange={(e)=>setMainHeader(e.target.value)} value={mainHeader} />
+            <input style={{maxWidth: '300px'}} dir="rtl" required autoComplete="off" type="text" id="mainHeader" name="mainHeader" onChange={(e)=>setMainHeader(e.target.value)} value={mainHeader} />
             <h4 style={{ textAlign: 'center' }}>  :בחר את סוגי הקלט שיופיעו למשתמש בעת יצירת פוסט</h4>
 
-            {/* {values.error ? <h3>{values.error}</h3> : <></>} */}
+            {/* {error ? <h3>{error}</h3> : <></>} */}
 
             <form dir='rtl' onSubmit={e => submitHandler(e)}>
                 <div className="react-icon" onClick={() => setShowOptions(!showOptions)}>
@@ -66,7 +67,8 @@ function PostSettingForm() {
                 {showOptions ? <ul className="input-options">
                     <li className="input-option" onClick={() => addInputType('input')}>טקסט קצר</li>
                     <li className="input-option" onClick={() => addInputType('textarea')}>טקסט ארוך</li>
-                    <li className="input-option" onClick={() => addInputType('select')}>בחירה מתוך אפשרויות</li>
+                    <li className="input-option" onClick={() => addInputType('select')}>בחירה יחידה מתוך אפשרויות</li>
+                    <li className="input-option" onClick={() => addInputType('checkboxes')}>בחירה מרובה מתוך אפשרויות</li>
                 </ul> : <></>}
 
                 <DragDropContext onDragEnd={handleDragEnd} >
