@@ -119,19 +119,19 @@ def insertStory():
     collection_name = db["story_body"]
     # story_data = json.loads(request.data.decode(encoding='UTF-8'))
 
-    # print("storyBody",item)
-    # item["id"] = collection_name.find({}).count()+1
+    print("storyBody",item)
+    item["id"] = collection_name.find({}).count()+1
     # # for key, value in story_temp.items():
     # #     item[value] = story_data[value]
-    # item["qoute"] = story_data["qoute"]
-    # item["author"] = story_data["author"]
-    # item["heroName"] = story_data["heroName"]
-    # item["story_img"] = story_data["story_img"]
-    # item["description"] = story_data["description"]
-    # item["title"] = story_data["title"]
-    # item["text"] = story_data["text"]
-    # item["date"] = story_data["date"]
-    # item["country"] = story_data["country"]
+    item["qoute"] = story_data["qoute"]
+    item["author"] = story_data["author"]
+    item["heroName"] = story_data["heroName"]
+    item["story_img"] = story_data["story_img"]
+    item["description"] = story_data["description"]
+    item["title"] = story_data["title"]
+    item["text"] = story_data["text"]
+    item["date"] = story_data["date"]
+    item["country"] = story_data["country"]
 
     # save to db of mizad hagvora
 
@@ -139,7 +139,7 @@ def insertStory():
     # item["story_img"] = "src/to/img"
 
 
-    # collection_name.insert_one(item)
+    collection_name.insert_one(item)
     ##call mizad hagvora api
 
 
@@ -174,7 +174,7 @@ def getStory():
     collection_name = db["story_body"]
     if storyId:
         print('storyId exsits',storyId)
-        item = collection_name.find_one({"_id" : ObjectId(storyId)})
+        item = collection_name.find_one({"id" : int(storyId)})
         print('story', item)
         item['_id'] = dumps(['_id'])
         del item['_id']
